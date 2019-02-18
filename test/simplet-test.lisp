@@ -9,8 +9,10 @@
                 #:reporter
                 #:test
                 #:test-only
+                #:test-skip
                 #:suite
                 #:suite-only
+                #:suite-skip
                 #:run))
 (in-package #:noloop.simplet-test)
 
@@ -24,7 +26,11 @@
    (test-case "Test interface-suite-pending" #'test-interface-suite-pending)
    (test-case "Test interface-test-pending" #'test-interface-test-pending)
    (test-case "Test interface-suite-only" #'test-interface-suite-only)
-   (test-case "Test interface-test-only" #'test-interface-test-only)))
+   (test-case "Test interface-test-only" #'test-interface-test-only)
+   (test-case "Test interface-suite-skip" #'test-interface-suite-skip)
+   (test-case "Test interface-test-skip" #'test-interface-test-skip)
+   (test-case "Test interface-suite-only-and-skip" #'test-interface-suite-only-and-skip)
+   (test-case "Test interface-test-only-and-skip" #'test-interface-test-only-and-skip)))
 
 (defun test-case (stg test-fn)
   (let ((result (funcall test-fn)))
@@ -78,7 +84,9 @@
                                        (fix-passing-test "2"))))
          (suites (list suite-1 suite-2))
          (runner-result (run-suites suites))
-         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                               "#...Simplet...#"
+                               ""
                                "Test-1: T"
                                "Test-2: T"
                                "Suite-1: T"
@@ -95,7 +103,9 @@
 
 (defun test-interface ()
   (let* ((actual-stg "")
-         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                               "#...Simplet...#"
+                               ""
                                "Test-1: T"
                                "Test-2: T"
                                "Suite-1: T"
@@ -116,7 +126,9 @@
 
 (defun test-interface-suite-pending ()
   (let* ((actual-stg "")
-         (expected-stg (format nil "~a~%~a~%~a~%~a~%"
+         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%"
+                               "#...Simplet...#"
+                               ""
                                "Suite-1: PENDING"
                                ""
                                "Runner result: T"
@@ -128,7 +140,9 @@
 
 (defun test-interface-test-pending ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                              "#...Simplet...#"
+                              ""
                               "Test-1: T"
                               "Test-2: PENDING"
                               "Suite-1: T"
@@ -144,7 +158,9 @@
 
 (defun test-interface-suite-only ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                              "#...Simplet...#"
+                              ""
                               "Test-1: T"
                               "Test-2: PENDING"
                               "Suite-1: T"
@@ -163,7 +179,9 @@
 
 (defun test-interface-test-only ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                              "#...Simplet...#"
+                              ""
                               "Test-3: T"
                               "Suite-1: T"
                               ""
@@ -183,3 +201,87 @@
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
+(defun test-interface-suite-skip ()
+  (let ((actual-stg "")
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                              "#...Simplet...#"
+                              ""
+                              "Test-1: T"
+                              "Test-2: T"
+                              "Suite-2: T"
+                              ""
+                              "Runner result: T"
+                              "")))
+    (suite-skip "Suite-1"
+                (test "Test-1" #'(lambda () (= 1 1)))
+                (test "Test-2"))
+    (suite "Suite-2"
+           (test "Test-1" #'(lambda () (= 1 1)))
+           (test "Test-2" #'(lambda () (= 1 1))))
+    (setf actual-stg (run :return-string t))
+    (simplet::clear-suites)
+    (string= actual-stg expected-stg)))
+
+(defun test-interface-test-skip ()
+  (let ((actual-stg "")
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                              "#...Simplet...#" 
+                              ""
+                              "Test-2: T"
+                              "Suite-2: T"
+                              ""
+                              "Runner result: T"
+                              "")))
+    (suite-skip "Suite-1"
+                (test "Test-1" #'(lambda () (= 1 1)))
+                (test "Test-2")
+                (test-skip "Test-3" #'(lambda () (= 1 1))))
+    (suite "Suite-2"
+           (test-skip "Test-1" #'(lambda () (= 1 1)))
+           (test "Test-2" #'(lambda () (= 1 1))))
+    (setf actual-stg (run :return-string t))
+    (simplet::clear-suites)
+    (string= actual-stg expected-stg)))
+
+(defun test-interface-suite-only-and-skip ()
+  (let ((actual-stg "")
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                              "#...Simplet...#"
+                              ""
+                              "Test-1: T"
+                              "Test-2: T"
+                              "Suite-2: T"
+                              ""
+                              "Runner result: T"
+                              "")))
+    (suite-skip "Suite-1"
+                (test "Test-1" #'(lambda () (= 1 1)))
+                (test "Test-2"))
+    (suite-only "Suite-2"
+           (test "Test-1" #'(lambda () (= 1 1)))
+           (test "Test-2" #'(lambda () (= 1 1))))
+    (setf actual-stg (run :return-string t))
+    (simplet::clear-suites)
+    (string= actual-stg expected-stg)))
+
+(defun test-interface-test-only-and-skip ()
+  (let ((actual-stg "")
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                              "#...Simplet...#" 
+                              ""
+                              "Test-1: T"
+                              "Test-2: PENDING"
+                              "Suite-1: T"
+                              ""
+                              "Runner result: T"
+                              "")))
+    (suite-only "Suite-1"
+                (test "Test-1" #'(lambda () (= 1 1)))
+                (test "Test-2")
+                (test-skip "Test-3" #'(lambda () (= 1 1))))
+    (suite "Suite-2"
+           (test-skip "Test-1" #'(lambda () (= 1 1)))
+           (test "Test-2" #'(lambda () (= 1 1))))
+    (setf actual-stg (run :return-string t))
+    (simplet::clear-suites)
+    (string= actual-stg expected-stg)))
