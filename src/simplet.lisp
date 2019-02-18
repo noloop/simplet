@@ -1,7 +1,7 @@
 (in-package #:noloop.simplet)
 
 ;; TEST
-(defun create-test (description &optional (fn nil))
+(defun create-test (description fn &key (only nil))
   (lambda ()
     (list description
           (if (null fn)
@@ -9,30 +9,35 @@
               (funcall fn)))))
 
 ;; SUITE
-(defun create-suite (description &rest tests)
+(defun create-suite (description tests &key (only nil))
   (lambda ()
-    (cond ((null (car tests)) (list description '() "PENDING"))
-          ((listp (car tests)) (progn
-                                 (setf tests (car tests))
-                                 (create-list-suite-result description tests)))
-          (t (create-list-suite-result description tests)))))
+    (if (null (car tests))
+        (list description '() "PENDING")
+        (create-list-suite-result description tests only))))
 
-(defun create-list-suite-result (description tests)
+(defun create-list-suite-result (description tests only)
   (let* ((test-results (mapcar #'(lambda (i) (funcall i)) tests))
          (suite-result (every
                         #'(lambda (i) (or (equal t (cadr i))
                                           (equalp "PENDING" (cadr i))))
                         test-results)))
-    (list description test-results suite-result)))
+    (list description test-results suite-result only)))
 
 ;; RUNNER
 (defun run-suites (suites)
-  (let ((results
-          (mapcar #'(lambda (i) (funcall i)) suites)))
-    (list results
+  (let* ((suite-results
+           (mapcar #'(lambda (i) (funcall i)) suites))
+         (suites-onlys (collect-suite-onlys suite-results)))
+    (if suites-onlys
+        (setf suite-results suites-onlys))
+    (list suite-results
           (every #'(lambda (i) (or (equal t (caddr i))
                                    (equalp "PENDING" (caddr i))))
-                 results))))
+                 suite-results))))
+
+(defun collect-suite-onlys (suites)
+  (remove nil (mapcar #'(lambda (i) (if (cadddr i) i))
+                      suites)))
 
 ;; REPORTER
 (defun reporter (runner-result &key (return-string nil))
@@ -55,7 +60,7 @@
                        (format nil "Runner result: ~a~%~%" end-result)))
     (if return-string
         epilogue
-        (format t "~a" epilogue))))
+        (format t "Simplet...~%~%~a" epilogue))))
 
 ;; INTERFACE
 (let ((suites '()))
@@ -68,8 +73,14 @@
   (defun test (description &optional (fn nil))
     (create-test description fn))
 
+  (defun test-only (description &optional (fn nil))
+    (create-test description fn :only t))
+
   (defun suite (description &rest tests)
     (push (create-suite description tests) suites))
+
+  (defun suite-only (description &rest tests)
+    (push (create-suite description tests :only t) suites))
 
   (defun run (&key (return-string nil))
     (if return-string
