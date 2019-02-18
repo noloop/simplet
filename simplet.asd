@@ -27,4 +27,4 @@
   :components ((:module "test"
                 :components
                 ((:file "simplet-test"))))
-  :perform (test-op (op system) (funcall (read-from-string "simplet-test::run"))))
+  :perform (test-op (op system) (funcall (read-from-string "simplet-test::test-run"))))

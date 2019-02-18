@@ -6,22 +6,26 @@
                 #:create-test
                 #:create-suite
                 #:run-suites
-                #:reporter))
+                #:reporter
+                #:test
+                #:suite
+                #:run))
 (in-package #:noloop.simplet-test)
 
-(defun run ()
-  (suite
-   (test "Test create-test" #'test-create-test)
-   (test "Test suite-test" #'test-create-suite)
-   (test "Test run-suites" #'test-run-suites)
-   (test "Test reporter" #'test-reporter)))
+(defun test-run ()
+  (test-suite
+   (test-case "Test create-test" #'test-create-test)
+   (test-case "Test suite-test" #'test-create-suite)
+   (test-case "Test run-suites" #'test-run-suites)
+   (test-case "Test reporter" #'test-reporter)
+   (test-case "Test interface" #'test-interface)))
 
-(defun test (stg test-fn)
+(defun test-case (stg test-fn)
   (let ((result (funcall test-fn)))
     (format t "~a: ~a~%" stg result)
     result))
 
-(defun suite (&rest results)
+(defun test-suite (&rest results)
   (format t "~%Tests result: ~a~%~%"
           (every #'(lambda (el) (equal t el)) results)))
 
@@ -83,4 +87,26 @@
     (setf actual-stg (reporter runner-result :return-string t))
     (string= expected-stg actual-stg)))
 
+(defun test-interface ()
+  (let* ((actual-stg "")
+         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                               "Test-1: T"
+                               "Test-2: T"
+                               "Suite-1: T"
+                               ""
+                               "Test-1: T"
+                               "Suite-2: T"
+                               ""
+                               "Runner result: T"
+                               "")))
+    (suite "Suite-1"
+           (test "Test-1" #'(lambda () (= 1 1)))
+           (test "Test-2" #'(lambda () (= 1 1))))
+    (suite "Suite-2"
+           (test "Test-1" #'(lambda () (= 1 1))))
+    (setf actual-stg (run :return-string t))
+    (simplet::clear-suites)
+    (string= actual-stg expected-stg)))
 
+;;testar suites sozinhas
+;; testes e suites sozinhas podem ser TODO e retornar t automaticamente

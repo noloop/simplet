@@ -8,6 +8,8 @@
 ;; SUITE
 (defun create-suite (description &rest tests)
   (lambda ()
+    (if (listp (car tests))
+        (setf tests (car tests)))
     (let* ((test-results (mapcar
                           #'(lambda (i) (funcall i))
                           tests))
@@ -48,19 +50,22 @@
 
 ;; INTERFACE
 (let ((suites '()))
+  (defun get-suites ()
+    suites)
+
+  (defun clear-suites ()
+    (setf suites '()))
+  
   (defun test (description fn)
-    (lambda ()
-      (create-test description fn)))
+    (create-test description fn))
 
-  (defun suite (description &rest results)
-    (push
-     (lambda ()
-       (create-suite description results))
-     suites))
+  (defun suite (description &rest tests)
+    (push (create-suite description tests) suites))
 
-  (defun run ()
-    (print suites)
-    (reporter (run-suites suites))))
+  (defun run (&key (return-string nil))
+    (if return-string
+        (reporter (run-suites (nreverse suites)) :return-string t)
+        (reporter (run-suites (nreverse suites))))))
 
 #| Example of use:
 CL-USER> (suite "Suite 1"
