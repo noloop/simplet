@@ -41,6 +41,19 @@ _**Note: Remember to configure asdf to find your directory where you downloaded 
 
 ## Topics...
 
+#| Example of use:
+CL-USER> (suite "Suite 1"
+             (test "Test one equal one" #'(lambda () (= 1 1)))
+             (test "Test two equal two" #'(lambda () (= 2 2))))
+
+CL-USER> (run)
+Test one equal one: T
+Test two equal two: T
+Suite 1: T
+
+Runner result: T
+|#
+
 ## API
 
 function **(lib-function-name args)**

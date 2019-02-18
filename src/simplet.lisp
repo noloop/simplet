@@ -107,16 +107,3 @@
         (reporter (run-suites (nreverse suites)) :return-string t)
         (reporter (run-suites (nreverse suites))))))
 
-#| Example of use:
-CL-USER> (suite "Suite 1"
-             (test "Test one equal one" #'(lambda () (= 1 1)))
-             (test "Test two equal two" #'(lambda () (= 2 2))))
-
-CL-USER> (run)
-Test one equal one: T
-Test two equal two: T
-Suite 1: T
-
-Runner result: T
-|#
-
