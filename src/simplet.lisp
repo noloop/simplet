@@ -1,29 +1,38 @@
 (in-package #:noloop.simplet)
 
 ;; TEST
-(defun create-test (description fn)
+(defun create-test (description &optional (fn nil))
   (lambda ()
-    (list description (funcall fn))))
+    (list description
+          (if (null fn)
+              "PENDING"
+              (funcall fn)))))
 
 ;; SUITE
 (defun create-suite (description &rest tests)
   (lambda ()
-    (if (listp (car tests))
-        (setf tests (car tests)))
-    (let* ((test-results (mapcar
-                          #'(lambda (i) (funcall i))
-                          tests))
-           (suite-result (every
-                          #'(lambda (i) (equal t (cadr i)))
-                          test-results)))
-      (list description test-results suite-result))))
+    (cond ((null (car tests)) (list description '() "PENDING"))
+          ((listp (car tests)) (progn
+                                 (setf tests (car tests))
+                                 (create-list-suite-result description tests)))
+          (t (create-list-suite-result description tests)))))
+
+(defun create-list-suite-result (description tests)
+  (let* ((test-results (mapcar #'(lambda (i) (funcall i)) tests))
+         (suite-result (every
+                        #'(lambda (i) (or (equal t (cadr i))
+                                          (equalp "PENDING" (cadr i))))
+                        test-results)))
+    (list description test-results suite-result)))
 
 ;; RUNNER
 (defun run-suites (suites)
   (let ((results
           (mapcar #'(lambda (i) (funcall i)) suites)))
     (list results
-          (every #'(lambda (i) (equal t (caddr i))) results))))
+          (every #'(lambda (i) (or (equal t (caddr i))
+                                   (equalp "PENDING" (caddr i))))
+                 results))))
 
 ;; REPORTER
 (defun reporter (runner-result &key (return-string nil))
@@ -56,7 +65,7 @@
   (defun clear-suites ()
     (setf suites '()))
   
-  (defun test (description fn)
+  (defun test (description &optional (fn nil))
     (create-test description fn))
 
   (defun suite (description &rest tests)

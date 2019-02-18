@@ -19,7 +19,8 @@
    (test-case "Test run-suites" #'test-run-suites)
    (test-case "Test reporter" #'test-reporter)
    (test-case "Test interface" #'test-interface)
-   (test-case "Test interface-suite-whitout-tests" #'test-interface-suite-whitout-tests)))
+   (test-case "Test interface-suite-pending" #'test-interface-suite-pending)
+   (test-case "Test interface-test-pending" #'test-interface-test-pending)))
 
 (defun test-case (stg test-fn)
   (let ((result (funcall test-fn)))
@@ -109,17 +110,31 @@
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
-(defun test-interface-suite-whitout-tests ()
+(defun test-interface-suite-pending ()
   (let* ((actual-stg "")
          (expected-stg (format nil "~a~%~a~%~a~%~a~%"
+                               "Suite-1: PENDING"
+                               ""
+                               "Runner result: T"
+                               "")))
+    (suite "Suite-1")
+    (setf actual-stg (run :return-string t))
+    (simplet::clear-suites)
+    (string= actual-stg expected-stg)))
+
+(defun test-interface-test-pending ()
+  (let* ((actual-stg "")
+         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%"
+                               "Test-1: T"
+                               "Test-2: PENDING"
                                "Suite-1: T"
                                ""
                                "Runner result: T"
                                "")))
     (suite "Suite-1"
-           )
+           (test "Test-1" #'(lambda () (= 1 1)))
+           (test "Test-2"))
     (setf actual-stg (run :return-string t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
-;; testes e suites sozinhas podem ser TODO e retornar t automaticamente
