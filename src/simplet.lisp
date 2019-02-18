@@ -6,7 +6,8 @@
     (list description
           (if (null fn)
               "PENDING"
-              (funcall fn)))))
+              (funcall fn))
+          only)))
 
 ;; SUITE
 (defun create-suite (description tests &key (only nil))
@@ -20,24 +21,32 @@
          (suite-result (every
                         #'(lambda (i) (or (equal t (cadr i))
                                           (equalp "PENDING" (cadr i))))
-                        test-results)))
+                        test-results))
+         (tests-only (collect-tests-only test-results)))
+    (if tests-only
+        (progn (setf test-results tests-only)
+               (setf only t)))
     (list description test-results suite-result only)))
 
 ;; RUNNER
 (defun run-suites (suites)
   (let* ((suite-results
            (mapcar #'(lambda (i) (funcall i)) suites))
-         (suites-onlys (collect-suite-onlys suite-results)))
-    (if suites-onlys
-        (setf suite-results suites-onlys))
+         (suites-only (collect-suites-only suite-results)))
+    (if suites-only
+        (setf suite-results suites-only))
     (list suite-results
           (every #'(lambda (i) (or (equal t (caddr i))
                                    (equalp "PENDING" (caddr i))))
                  suite-results))))
 
-(defun collect-suite-onlys (suites)
+(defun collect-suites-only (suites)
   (remove nil (mapcar #'(lambda (i) (if (cadddr i) i))
                       suites)))
+
+(defun collect-tests-only (tests)
+  (remove nil (mapcar #'(lambda (i) (if (caddr i) i))
+                      tests)))
 
 ;; REPORTER
 (defun reporter (runner-result &key (return-string nil))

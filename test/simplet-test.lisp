@@ -23,7 +23,8 @@
    (test-case "Test interface" #'test-interface)
    (test-case "Test interface-suite-pending" #'test-interface-suite-pending)
    (test-case "Test interface-test-pending" #'test-interface-test-pending)
-   (test-case "Test interface-suite-only" #'test-interface-suite-only)))
+   (test-case "Test interface-suite-only" #'test-interface-suite-only)
+   (test-case "Test interface-test-only" #'test-interface-test-only)))
 
 (defun test-case (stg test-fn)
   (let ((result (funcall test-fn)))
@@ -160,8 +161,25 @@
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
+(defun test-interface-test-only ()
+  (let ((actual-stg "")
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+                              "Test-3: T"
+                              "Suite-1: T"
+                              ""
+                              "Test-1: T"
+                              "Suite-2: T"
+                              ""
+                              "Runner result: T"
+                              "")))
+    (suite-only "Suite-1"
+                (test "Test-1" #'(lambda () (= 1 1)))
+                (test "Test-2")
+                (test-only "Test-3" #'(lambda () (= 1 1))))
+    (suite "Suite-2"
+           (test-only "Test-1" #'(lambda () (= 1 1)))
+           (test "Test-2" #'(lambda () (= 1 1))))
+    (setf actual-stg (run :return-string t))
+    (simplet::clear-suites)
+    (string= actual-stg expected-stg)))
 
-;; (collect-suite-onlys% (list (list "suite1" '() t nil) (list "suite2" '() t t)))
-;; (defun collect-suite-onlys% (suites)
-;;   (remove nil (mapcar #'(lambda (i) (if (cadddr i) i))
-;;                       suites)))
