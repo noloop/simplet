@@ -204,6 +204,27 @@ Runner result: T
 
 NIL
 ```
+## ASDF integration
+
+Do not forget to add `:defsystem-depends-on (:simplet-asdf)` to  `your-app.asd` system definition file, this will enable`:test-file` in the `: components`. The class `:test-file` is similar to`:file` except it will be loaded only when call `asdf:test-system`. See an example below:
+
+```lisp
+(defsystem :your-app
+  ;; ...
+  :in-order-to ((test-op (test-op my-app-test))))
+
+(defsystem :skeleton-creator/test
+  :author "your <your@youremail.com>"
+  :depends-on (:your-app :simplet)
+  :defsystem-depends-on (:simplet-asdf)
+  :components ((:module "test"
+                :components
+                ((:test-file "your-app-test"))))
+  :perform (test-op :after (op c)
+                    (progn (funcall (intern #.(string :run-simplet-asdf) :simplet) c)
+                           (symbol-call :simplet '#:run))))
+                           
+```
 
 ## Limitations
 
@@ -214,8 +235,6 @@ NIL
 * Without recursives suites
 * Without assertion libraries integration
 * Not possible execution of tests whitout suites(because not contain the concept of root-suite.)
-
-If you need the above utilities, check out my other test library, it's called Cacau(In progress...).
 
 ## API
 
