@@ -206,7 +206,7 @@ NIL
 ```
 ## ASDF integration
 
-Do not forget to add `:defsystem-depends-on (:simplet-asdf)` to  `your-app.asd` system definition file, this will enable`:test-file` in the `: components`. The class `:test-file` is similar to`:file` except it will be loaded only when call `asdf:test-system`. See an example below:
+Do not forget to add `:defsystem-depends-on (:simplet-asdf)` to  `your-app.asd` system definition file, this will enable`:test-file` in the `:components`. The class `:test-file` is similar to`:file` except it will be loaded only when call `asdf:test-system`. See an example below:
 
 ```lisp
 (defsystem :your-app
