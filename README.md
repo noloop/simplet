@@ -226,6 +226,12 @@ Do not forget to add `:defsystem-depends-on (:simplet-asdf)` to  `your-app.asd` 
                            
 ```
 
+To run tests with ASDF:
+
+```lisp
+(asdf: test-system: my-app)
+```
+
 ## Limitations
 
 * Whitout cacth error
