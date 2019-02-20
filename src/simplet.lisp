@@ -103,7 +103,10 @@
     (push (create-suite description tests :skip t) suites))
 
   (defun run (&key (return-string nil))
-    (if return-string
-        (reporter (run-suites (nreverse suites)) :return-string t)
-        (reporter (run-suites (nreverse suites))))))
+    (let ((runner-result (run-suites (nreverse suites)))
+          (string-result nil))
+      (clear-suites)
+      (if return-string
+          (reporter runner-result :return-string t)
+          (reporter runner-result)))))
 
