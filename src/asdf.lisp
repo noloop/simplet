@@ -1,6 +1,6 @@
 (in-package #:cl-user)
 (defpackage #:simplet-asdf
-  (:nicknames #:prove-asdf)
+  (:nicknames #:simplet-asdf)
   (:use #:common-lisp
         #:asdf)
   (:export #:test-file
@@ -25,7 +25,7 @@
   #+quicklisp (ql:quickload (if (typep system-designator 'asdf:system)
                                 (asdf:component-name system-designator)
                                 system-designator))
-  #-quicklisp (asdf:load-system system-designator)
+  #-Quicklisp (asdf:load-system system-designator)
   (restart-case
       (dolist (c (reverse
                   (gethash (asdf:find-system system-designator) *system-test-files*)))
