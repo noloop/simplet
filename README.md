@@ -220,7 +220,7 @@ Do not forget to add `:defsystem-depends-on (:simplet-asdf)` to  `your-app.asd` 
   :components ((:module "test"
                 :components
                 ((:test-file "your-app-test"))))
-  :perform (test-op :after (op c)
+  :perform (test-op (op c)
                     (progn (funcall (intern #.(string :run-simplet-asdf) :simplet) c)
                            (symbol-call :simplet '#:run))))
                            
