@@ -211,7 +211,7 @@ Do not forget to add `:defsystem-depends-on (:simplet-asdf)` to  `your-app.asd` 
 ```lisp
 (defsystem :your-app
   ;; ...
-  :in-order-to ((test-op (test-op my-app-test))))
+  :in-order-to ((test-op (test-op your-app/test))))
 
 (defsystem :your-app/test
   :author "your <your@youremail.com>"
@@ -229,7 +229,7 @@ Do not forget to add `:defsystem-depends-on (:simplet-asdf)` to  `your-app.asd` 
 To run tests with ASDF:
 
 ```lisp
-(asdf:test-system :my-app)
+(asdf:test-system :your-app)
 ```
 
 ## Limitations
