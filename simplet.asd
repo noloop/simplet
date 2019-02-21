@@ -11,7 +11,8 @@
   :description "Simple test runner in Common Lisp."
   :components ((:module "src"
                 :components
-                ((:file "package")
+                ((:file "asdf")
+                 (:file "package" :depends-on ("asdf"))
                  (:file "simplet" :depends-on ("package")))))
   :long-description
   #.(uiop:read-file-string
