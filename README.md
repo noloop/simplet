@@ -213,7 +213,7 @@ Do not forget to add `:defsystem-depends-on (:simplet-asdf)` to  `your-app.asd` 
   ;; ...
   :in-order-to ((test-op (test-op my-app-test))))
 
-(defsystem :skeleton-creator/test
+(defsystem :your-app/test
   :author "your <your@youremail.com>"
   :depends-on (:your-app :simplet)
   :defsystem-depends-on (:simplet-asdf)
