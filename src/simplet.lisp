@@ -54,7 +54,7 @@
                       tests)))
 
 ;; REPORTER
-(defun reporter (runner-result &key (return-string nil))
+(defun reporter (runner-result &key return-string-p)
   (let ((suite-results (car runner-result))
         (end-result (cadr runner-result))
         (epilogue ""))
@@ -72,7 +72,7 @@
           (concatenate 'string
                        epilogue
                        (format nil "Runner result: ~a~%~%" end-result)))
-    (if return-string
+    (if return-string-p
         (format nil "#...Simplet...#~%~%~a" epilogue)
         (format t "#...Simplet...#~%~%~a" epilogue))))
 
@@ -102,11 +102,10 @@
   (defun suite-skip (description &rest tests)
     (push (create-suite description tests :skip t) suites))
 
-  (defun run (&key (return-string nil))
-    (let ((runner-result (run-suites (nreverse suites)))
-          (string-result nil))
+  (defun run (&key return-string-p)
+    (let ((runner-result (run-suites (nreverse suites))))
       (clear-suites)
-      (if return-string
-          (reporter runner-result :return-string t)
+      (if return-string-p
+          (reporter runner-result :return-string-p t)
           (reporter runner-result)))))
 
