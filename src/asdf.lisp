@@ -11,9 +11,11 @@
 
 (defclass test-file (asdf:cl-source-file) ())
 
-(defmethod asdf:perform ((op asdf:compile-op) (c test-file))
-  ;; do nothing
-  )
+(defmethod asdf:input-files ((o asdf:compile-op) (c test-file)) ())
+
+(defmethod asdf:output-files ((o asdf:compile-op) (c test-file)) ())
+
+(defmethod asdf:perform ((op asdf:compile-op) (c test-file)) ())
 
 (defmethod asdf:perform ((op asdf:load-op) (c test-file))
   (pushnew c (gethash (asdf:component-system c) *system-test-files*)

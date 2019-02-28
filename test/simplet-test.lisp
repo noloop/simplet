@@ -98,7 +98,7 @@
                                "Runner result: T"
                                ""))
          (actual-stg ""))
-    (setf actual-stg (reporter runner-result :return-string t))
+    (setf actual-stg (reporter runner-result :return-string-p t))
     (string= expected-stg actual-stg)))
 
 (defun test-interface ()
@@ -120,7 +120,7 @@
            (test "Test-2" #'(lambda () (= 1 1))))
     (suite "Suite-2"
            (test "Test-1" #'(lambda () (= 1 1))))
-    (setf actual-stg (run :return-string t))
+    (setf actual-stg (run :return-string-p t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
@@ -134,7 +134,7 @@
                                "Runner result: T"
                                "")))
     (suite "Suite-1")
-    (setf actual-stg (run :return-string t))
+    (setf actual-stg (run :return-string-p t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
@@ -152,7 +152,7 @@
     (suite "Suite-1"
            (test "Test-1" #'(lambda () (= 1 1)))
            (test "Test-2"))
-    (setf actual-stg (run :return-string t))
+    (setf actual-stg (run :return-string-p t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
@@ -173,7 +173,7 @@
     (suite "Suite-2"
            (test "Test-1" #'(lambda () (= 1 1)))
            (test "Test-2" #'(lambda () (= 1 1))))
-    (setf actual-stg (run :return-string t))
+    (setf actual-stg (run :return-string-p t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
@@ -197,7 +197,7 @@
     (suite "Suite-2"
            (test-only "Test-1" #'(lambda () (= 1 1)))
            (test "Test-2" #'(lambda () (= 1 1))))
-    (setf actual-stg (run :return-string t))
+    (setf actual-stg (run :return-string-p t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
@@ -218,7 +218,7 @@
     (suite "Suite-2"
            (test "Test-1" #'(lambda () (= 1 1)))
            (test "Test-2" #'(lambda () (= 1 1))))
-    (setf actual-stg (run :return-string t))
+    (setf actual-stg (run :return-string-p t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
@@ -239,7 +239,7 @@
     (suite "Suite-2"
            (test-skip "Test-1" #'(lambda () (= 1 1)))
            (test "Test-2" #'(lambda () (= 1 1))))
-    (setf actual-stg (run :return-string t))
+    (setf actual-stg (run :return-string-p t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
@@ -260,7 +260,7 @@
     (suite-only "Suite-2"
            (test "Test-1" #'(lambda () (= 1 1)))
            (test "Test-2" #'(lambda () (= 1 1))))
-    (setf actual-stg (run :return-string t))
+    (setf actual-stg (run :return-string-p t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))
 
@@ -282,6 +282,6 @@
     (suite "Suite-2"
            (test-skip "Test-1" #'(lambda () (= 1 1)))
            (test "Test-2" #'(lambda () (= 1 1))))
-    (setf actual-stg (run :return-string t))
+    (setf actual-stg (run :return-string-p t))
     (simplet::clear-suites)
     (string= actual-stg expected-stg)))

@@ -73,7 +73,7 @@ NIL
 You also can getting an string of run, instead of printing on REPL:
 
 ```lisp
-CL-USER> (run :return-string t)
+CL-USER> (run :return-string-p t)
 NIL
 ```
 ## Suites and tests PENDING(or also called TODO)
@@ -256,4 +256,4 @@ function **(test-only description &optional fn)**
 
 function **(test-skip description &optional fn)**
 
-function **(run &key return-string)**
+function **(run &key return-string-p)**
