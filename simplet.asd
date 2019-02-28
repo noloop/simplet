@@ -4,7 +4,7 @@
   :author "noloop <noloop@zoho.com>"
   :maintainer "noloop <noloop@zoho.com>"
   :license "GPLv3"
-  :version "1.1.1"
+  :version "1.2.0"
   :homepage "https://github.com/noloop/simplet"
   :bug-tracker "https://github.com/noloop/simplet/issues"
   :source-control (:git "git@github.com:noloop/simplet.git")
