@@ -67,6 +67,7 @@
       (setf epilogue
             (concatenate 'string
                          epilogue
+                         (format nil "-----------------------------------~%" )
                          (format nil "~a: ~a~%~%" (car suite) (caddr suite)))))
     (setf epilogue
           (concatenate 'string
@@ -78,6 +79,7 @@
 
 ;; INTERFACE
 (let ((suites '()))
+  
   (defun get-suites ()
     suites)
 
@@ -105,7 +107,11 @@
   (defun run (&key return-string-p)
     (let ((runner-result (run-suites (nreverse suites))))
       (clear-suites)
-      (if return-string-p
-          (reporter runner-result :return-string-p t)
-          (reporter runner-result)))))
+      (handler-case
+          (if return-string-p
+              (reporter runner-result :return-string-p t)
+              (reporter runner-result))
+        (error (c)
+          (clear-suites)
+          (error c))))))
 

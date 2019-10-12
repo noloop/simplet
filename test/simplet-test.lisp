@@ -84,15 +84,17 @@
                                        (fix-passing-test "2"))))
          (suites (list suite-1 suite-2))
          (runner-result (run-suites suites))
-         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                                "#...Simplet...#"
                                ""
                                "Test-1: T"
                                "Test-2: T"
+                               "-----------------------------------"
                                "Suite-1: T"
                                ""
                                "Test-1: T"
                                "Test-2: T"
+                               "-----------------------------------"
                                "Suite-2: T"
                                ""
                                "Runner result: T"
@@ -103,14 +105,16 @@
 
 (defun test-interface ()
   (let* ((actual-stg "")
-         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                                "#...Simplet...#"
                                ""
                                "Test-1: T"
                                "Test-2: T"
+                               "-----------------------------------"
                                "Suite-1: T"
                                ""
                                "Test-1: T"
+                               "-----------------------------------"
                                "Suite-2: T"
                                ""
                                "Runner result: T"
@@ -126,9 +130,10 @@
 
 (defun test-interface-suite-pending ()
   (let* ((actual-stg "")
-         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%"
+         (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                                "#...Simplet...#"
                                ""
+                               "-----------------------------------"
                                "Suite-1: PENDING"
                                ""
                                "Runner result: T"
@@ -140,11 +145,12 @@
 
 (defun test-interface-test-pending ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                               "#...Simplet...#"
                               ""
                               "Test-1: T"
                               "Test-2: PENDING"
+                              "-----------------------------------"
                               "Suite-1: T"
                               ""
                               "Runner result: T"
@@ -158,11 +164,12 @@
 
 (defun test-interface-suite-only ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                               "#...Simplet...#"
                               ""
                               "Test-1: T"
                               "Test-2: PENDING"
+                              "-----------------------------------"
                               "Suite-1: T"
                               ""
                               "Runner result: T"
@@ -179,13 +186,15 @@
 
 (defun test-interface-test-only ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                               "#...Simplet...#"
                               ""
                               "Test-3: T"
+                              "-----------------------------------"
                               "Suite-1: T"
                               ""
                               "Test-1: T"
+                              "-----------------------------------"
                               "Suite-2: T"
                               ""
                               "Runner result: T"
@@ -203,11 +212,12 @@
 
 (defun test-interface-suite-skip ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                               "#...Simplet...#"
                               ""
                               "Test-1: T"
                               "Test-2: T"
+                              "-----------------------------------"
                               "Suite-2: T"
                               ""
                               "Runner result: T"
@@ -224,10 +234,11 @@
 
 (defun test-interface-test-skip ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                               "#...Simplet...#" 
                               ""
                               "Test-2: T"
+                              "-----------------------------------"
                               "Suite-2: T"
                               ""
                               "Runner result: T"
@@ -245,11 +256,12 @@
 
 (defun test-interface-suite-only-and-skip ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                               "#...Simplet...#"
                               ""
                               "Test-1: T"
                               "Test-2: T"
+                              "-----------------------------------"
                               "Suite-2: T"
                               ""
                               "Runner result: T"
@@ -266,11 +278,12 @@
 
 (defun test-interface-test-only-and-skip ()
   (let ((actual-stg "")
-        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
+        (expected-stg (format nil "~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%~a~%"
                               "#...Simplet...#" 
                               ""
                               "Test-1: T"
                               "Test-2: PENDING"
+                              "-----------------------------------"
                               "Suite-1: T"
                               ""
                               "Runner result: T"

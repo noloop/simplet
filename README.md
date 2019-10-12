@@ -12,30 +12,23 @@ I believe it works in all implementations, but I only tested the one I use, whic
 
 No dependency.
 
-### Download and installation
+### Download and load
 
-**1 - Download simplet system**
-
-By quicklisp:
+**1 - Load simplet system by quicklisp**
 
 ```
-IN PROGRESS...
+(ql:quickload :simplet)
 ```
 
-or directly from github:
+**2 - Download and load simplet system by github and asdf**
+
+Download directly from github:
 
 ```
 git clone https://github.com/noloop/simplet.git
 ```
-**2 - Install simplet**
 
-By quicklisp:
-
-```
-IN PROGRESS...
-```
-
-or directly from asdf:
+and load by ASDF:
 
 ```lisp
 (asdf:load-system :simplet)
@@ -46,16 +39,16 @@ _**Note: Remember to configure asdf to find your directory where you downloaded 
 ## Create suite and test
 
 ```lisp
-CL-USER> (suite "Suite 1"
+SIMPLET> (suite "Suite 1"
                 (test "Test one equal one" #'(lambda () (= 1 1)))
                 (test "Test two equal two" #'(lambda () (= 2 2))))
-CL-USER> (suite "Suite 2"
+SIMPLET> (suite "Suite 2"
                 (test "Test three equal three" #'(lambda () (= 3 3))))
 ```
 ## Run tests
 
 ```lisp
-CL-USER> (run)
+SIMPLET> (run)
 #...Simplet...#
 
 Test one equal one: T
@@ -73,7 +66,7 @@ NIL
 You also can getting an string of run, instead of printing on REPL:
 
 ```lisp
-CL-USER> (run :return-string-p t)
+SIMPLET> (run :return-string-p t)
 NIL
 ```
 ## Suites and tests PENDING(or also called TODO)
@@ -81,12 +74,12 @@ NIL
 It's simple to add a suite or test PENDING. To the suites, just do not add tests to it. To the tests just do not add a test function. Suites and tests PENDING do not make the runner result fail, however they are marked with PENDING instead of T. See the example below:
 
 ```lisp
-CL-USER> (suite "Suite 1"
+SIMPLET> (suite "Suite 1"
                 (test "Test one equal one" #'(lambda () (= 1 1)))
                 (test "Test two equal two"))
-CL-USER> (suite "Suite 2")
+SIMPLET> (suite "Suite 2")
 
-CL-USER> (run)
+SIMPLET> (run)
 #...Simplet...#
 
 Test one equal one: T
@@ -105,13 +98,13 @@ NIL
 For suites only:
 
 ```lisp
-CL-USER> (suite-only "Suite 1"
+SIMPLET> (suite-only "Suite 1"
                      (test "Test one equal one" #'(lambda () (= 1 1)))
                      (test "Test two equal two" #'(lambda () (= 2 2))))
-CL-USER> (suite "Suite 2"
+SIMPLET> (suite "Suite 2"
                 (test "Test three equal three" #'(lambda () (= 3 3))))
 
-CL-USER> (run)
+SIMPLET> (run)
 #...Simplet...#
 
 Test one equal one: T
@@ -126,13 +119,13 @@ NIL
 For tests only:
 
 ```lisp
-CL-USER> (suite "Suite 1"
+SIMPLET> (suite "Suite 1"
                  (test-only "Test one equal one" #'(lambda () (= 1 1)))
                  (test "Test two equal two" #'(lambda () (= 2 2))))
-CL-USER> (suite "Suite 2"
+SIMPLET> (suite "Suite 2"
                 (test-only "Test three equal three" #'(lambda () (= 3 3))))
 
-CL-USER> (run)
+SIMPLET> (run)
 #...Simplet...#
 
 Test one equal one: T
@@ -149,13 +142,13 @@ NIL
 For suites skip:
 
 ```lisp
-CL-USER> (suite-skip "Suite 1"
+SIMPLET> (suite-skip "Suite 1"
                      (test "Test one equal one" #'(lambda () (= 1 1)))
                      (test "Test two equal two" #'(lambda () (= 2 2))))
-CL-USER> (suite "Suite 2"
+SIMPLET> (suite "Suite 2"
                  (test "Test three equal three" #'(lambda () (= 3 3))))
 
-CL-USER> (run)
+SIMPLET> (run)
 #...Simplet...#
 
 Test three equal three: T
@@ -169,13 +162,13 @@ NIL
 For tests skip:
 
 ```lisp
-CL-USER> (suite "Suite 1"
+SIMPLET> (suite "Suite 1"
                  (test-skip "Test one equal one" #'(lambda () (= 1 1)))
                  (test "Test two equal two" #'(lambda () (= 2 2))))
-CL-USER> (suite "Suite 2"
+SIMPLET> (suite "Suite 2"
                  (test-skip "Test three equal three" #'(lambda () (= 3 3))))
 
-CL-USER> (run)
+SIMPLET> (run)
 #...Simplet...#
 
 Test two equal two: T
@@ -191,13 +184,13 @@ NIL
 Beware of traps when mixing only and skip:
 
 ```lisp
-CL-USER> (suite-skip "Suite 1"
+SIMPLET> (suite-skip "Suite 1"
                      (test-only "Test one equal one" #'(lambda () (= 1 1)))
                      (test "Test two equal two" #'(lambda () (= 2 2))))
-CL-USER> (suite "Suite 2"
+SIMPLET> (suite "Suite 2"
                  (test "Test three equal three" #'(lambda () (= 3 3))))
 
-CL-USER> (run)
+SIMPLET> (run)
 #...Simplet...#
 
 Runner result: T
