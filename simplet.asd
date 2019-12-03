@@ -1,5 +1,4 @@
 ;;;; -*- Mode: Lisp; Syntax: ANSI-Common-Lisp; Base: 10 -*-
-
 (defsystem :simplet
   :author "noloop <noloop@zoho.com>"
   :maintainer "noloop <noloop@zoho.com>"

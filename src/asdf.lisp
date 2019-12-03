@@ -3,35 +3,11 @@
   (:nicknames #:simplet-asdf)
   (:use #:common-lisp
         #:asdf)
-  (:export #:test-file
-           #:run-simplet-asdf))
+  (:export #:test-file))
 (in-package #:simplet-asdf)
 
-(defvar *system-test-files* (make-hash-table))
-
-(defclass test-file (asdf:cl-source-file) ())
-
-(defmethod asdf:input-files ((o asdf:compile-op) (c test-file)) ())
-
-(defmethod asdf:output-files ((o asdf:compile-op) (c test-file)) ())
-
-(defmethod asdf:perform ((op asdf:compile-op) (c test-file)) ())
-
-(defmethod asdf:perform ((op asdf:load-op) (c test-file))
-  (pushnew c (gethash (asdf:component-system c) *system-test-files*)
-           :key #'asdf:component-pathname
-           :test #'equal))
-
-(defun run-simplet-asdf (system-designator)
-  "Runs a testing ASDF system."
-  #+quicklisp (ql:quickload (if (typep system-designator 'asdf:system)
-                                (asdf:component-name system-designator)
-                                system-designator))
-  #-Quicklisp (asdf:load-system system-designator)
-  (restart-case
-      (dolist (c (reverse
-                  (gethash (asdf:find-system system-designator) *system-test-files*)))
-        (restart-case
-            (asdf:perform 'asdf:load-source-op c)))))
+(defclass test-file (cl-source-file) ())
+(defmethod operation-done-p ((op load-op) (c test-file)) nil)
+(defmethod operation-done-p ((op compile-op) (c test-file)) t)
 
 (import 'test-file :asdf)
